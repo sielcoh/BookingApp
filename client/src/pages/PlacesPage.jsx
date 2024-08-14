@@ -23,7 +23,6 @@ export default function PlacesPage() {
             return [...prev, fileName];
         });
         setPhotoLink('');
-
     }
 
     const uploadPhoto = (e) => {

@@ -93,6 +93,7 @@ app.post('/upload-by-link', async (req, res) => {
     res.json(newName)
 
 })
+
 const photosMiddleWare = multer({ dest: 'uploads' })
 app.post('/upload', photosMiddleWare.array('photos', 100), async (req, res) => {
     const uploadedFiles = [];
@@ -102,7 +103,6 @@ app.post('/upload', photosMiddleWare.array('photos', 100), async (req, res) => {
         const ext = parts[parts.length - 1]
         const newPath = path + '.' + ext;
         fs.renameSync(path, newPath);
-        console.log(newPath.replace('uploads\\', ''));
         uploadedFiles.push(newPath.replace('uploads\\', ''));
 
     }
