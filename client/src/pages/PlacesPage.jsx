@@ -119,7 +119,7 @@ export default function PlacesPage() {
                 {places.length > 0 && places.map(place => (
                     <Link to={'/account/places/' + place._id} key={place._id} className='flex cursor-pointer gap-4 bg-gray-100 p-2 rounded-2xl'>
                         {place.photos.length > 0 && place.photos.map(photo => {
-                            return <div className='flex gap-2 w-32 h-32 grow shrink-0'>
+                            return <div key={photo} className='flex gap-2 w-32 h-32 grow shrink-0'>
                                 <img className='rounded-2xl' key={photo} src={'http://localhost:4000/uploads/' + photo} alt='' />
                             </div>
                         })}
