@@ -140,4 +140,9 @@ app.get('/places', async (req, res) => {
     });
 })
 
+app.get('/places/:action', async (req, res) => {
+    const { action } = (req.params);
+    res.json(await Place.findById(action))
+})
+
 app.listen(4000);

@@ -16,7 +16,7 @@ export default function LoginPage() {
       console.log(data);
       alert('Login successful');
       setUser(data);
-      nav('/');
+      nav('/account');
     } catch {
       alert('Login fail');
 
