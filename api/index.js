@@ -81,8 +81,8 @@ app.get('/profile', (req, res) => {
 });
 
 app.post('/logout', (req, res) => {
-    res.cookie('token', '').json(true)
-})
+    res.cookie('token', '').json(true);
+});
 
 app.post('/upload-by-link', async (req, res) => {
     const { link } = req.body;
@@ -90,10 +90,9 @@ app.post('/upload-by-link', async (req, res) => {
     await download.image({
         url: link,
         dest: __dirname + '/uploads/' + newName
-    })
+    });
     res.json(newName)
-
-})
+});
 
 const photosMiddleWare = multer({ dest: 'uploads' })
 app.post('/upload', photosMiddleWare.array('photos', 100), async (req, res) => {
@@ -108,7 +107,7 @@ app.post('/upload', photosMiddleWare.array('photos', 100), async (req, res) => {
 
     }
     res.json(uploadedFiles);
-})
+});
 
 app.post('/places', (req, res) => {
     const { token } = req.cookies;
@@ -140,9 +139,30 @@ app.get('/places', async (req, res) => {
     });
 })
 
-app.get('/places/:action', async (req, res) => {
-    const { action } = (req.params);
-    res.json(await Place.findById(action))
-})
+app.get('/places/:id', async (req, res) => {
+    const { id } = (req.params);
+    res.json(await Place.findById(id))
+});
+
+app.put('/places', async (req, res) => {
+    const { token } = req.cookies;
+    const { id, title, address, addedPhotos,
+        description, perks, extreInfo,
+        checkIn, checkOut, maxGuests } = req.body;
+    jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+        const placeDoc = await Place.findById(id);
+        if (err) throw err;
+        if (userData.id === placeDoc.owner.toString()) {
+            placeDoc.set({
+                title, address, photos: addedPhotos,
+                description, perks, extreInfo,
+                checkIn, checkOut, maxGuests
+            })
+            await placeDoc.save();
+            res.json('ok');
+        }
+    });
+
+});
 
 app.listen(4000);

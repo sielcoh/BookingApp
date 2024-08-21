@@ -19,11 +19,11 @@ export default function AddNewPlace() {
     const { pathname } = useLocation()
     const nav = useNavigate();
 
-    let subpage = pathname.split('/')?.[3];
+    let id = pathname.split('/')?.[3];
     useEffect(() => {
-        if (!subpage) return
+        if (!id) return
         else {
-            axios.get('/places/' + subpage)
+            axios.get('/places/' + id)
                 .then(response => {
                     const { data } = response;
                     setTitle(data.title);
@@ -37,22 +37,31 @@ export default function AddNewPlace() {
                     setMaxGuests(data.maxGuests)
                 })
         }
-    }, [subpage])
+    }, [id])
 
-    const addNewPlace = async (e) => {
+    const savePlace = async (e) => {
         e.preventDefault();
-        await axios.post('/places', {
+        const placeData ={
             title, address, addedPhotos,
             description, perks, exstraInfo,
             checkIn, checkOut, maxGuests
-        });
+        }
+        if (id) {
+            await axios.put('/places', {
+                id,...placeData
+            });
+        } else {
+            await axios.post('/places', {
+                ...placeData
+            });
+        }
         nav('/account/placepage');
     }
 
     return (
         <div>
             <AccountNavigator />
-            <form onSubmit={addNewPlace}>
+            <form onSubmit={savePlace}>
                 <h2 className='text-2xl mt-4'>Tile</h2>
                 <p className='text-gray-500 text-sm'>Title for your place. should be short and catchy as in advertisment</p>
                 <input

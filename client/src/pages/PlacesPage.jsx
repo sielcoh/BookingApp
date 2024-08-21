@@ -28,14 +28,14 @@ export default function PlacesPage() {
 
             <div className='mt-4'>
                 {places.length > 0 && places.map(place => (
-                    <Link to={'/account/addnewplace/' + place._id} key={place._id} className='flex cursor-pointer gap-6 bg-gray-100 rounded-2xl mt-4'>
-                        {place.photos.length > 0 && place.photos.map(photo => {
-                            return (
-                                <div key={photo}>
-                                    <img className='rounded-2xl w-32 h-32' key={photo} src={'http://localhost:4000/uploads/' + photo} alt='' />
-                                </div>
-                            )
-                        })}
+                    <Link to={'/account/addnewplace/' + place._id} key={place._id} className='flex cursor-pointer gap-4 bg-gray-100 rounded-2xl p-4'>
+                        <div className='flex w-32 h-32 bg-gray-300 grow shrink-0'>
+                            {place.photos.length > 0 && place.photos.map(photo => {
+                                return (
+                                    <img key={photo} className='object-cover' src={'http://localhost:4000/uploads/' + photo} alt='' />
+                                )
+                            })}
+                        </div>
 
                         <div className='grow-0 shrink'>
                             <h2 className='text-xl'>{place.title}</h2>
