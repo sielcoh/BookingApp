@@ -58,7 +58,6 @@ app.post('/login', async (req, res) => {
                     if (err) throw err;
                     res.cookie('token', token).json(userDoc);
                 });
-
         } else {
             res.status(442).json('pass not ok')
         }
@@ -104,7 +103,6 @@ app.post('/upload', photosMiddleWare.array('photos', 100), async (req, res) => {
         const newPath = path + '.' + ext;
         fs.renameSync(path, newPath);
         uploadedFiles.push(newPath.replace('uploads\\', ''));
-
     }
     res.json(uploadedFiles);
 });
@@ -113,8 +111,8 @@ app.post('/places', (req, res) => {
     const { token } = req.cookies;
     const { title, address, addedPhotos,
         description, perks, extraInfo,
-        checkIn, checkOut, maxGuests } = req.body;
-        
+        checkIn, checkOut, maxGuests, price } = req.body;
+
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
@@ -123,15 +121,14 @@ app.post('/places', (req, res) => {
             owner: userData.id,
             title, address, photos: addedPhotos,
             description, perks, extraInfo,
-            checkIn, checkOut, maxGuests
+            checkIn, checkOut, maxGuests, price
 
         })
         res.json(placeDoc);
     });
-
 });
 
-app.get('/places', async (req, res) => {
+app.get('/user-places', async (req, res) => {
     const { token } = req.cookies;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
@@ -149,7 +146,7 @@ app.put('/places', async (req, res) => {
     const { token } = req.cookies;
     const { id, title, address, addedPhotos,
         description, perks, extraInfo,
-        checkIn, checkOut, maxGuests } = req.body;
+        checkIn, checkOut, maxGuests, price } = req.body;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         const placeDoc = await Place.findById(id);
         if (err) throw err;
@@ -157,13 +154,16 @@ app.put('/places', async (req, res) => {
             placeDoc.set({
                 title, address, photos: addedPhotos,
                 description, perks, extraInfo,
-                checkIn, checkOut, maxGuests
+                checkIn, checkOut, maxGuests, price
             })
             await placeDoc.save();
             res.json('ok');
         }
     });
-
 });
+
+app.get('/places', async (req, res) => {
+    res.json(await Place.find())
+})
 
 app.listen(4000);

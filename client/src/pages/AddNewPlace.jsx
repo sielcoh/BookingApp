@@ -16,6 +16,7 @@ export default function AddNewPlace() {
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
     const [maxGuests, setMaxGuests] = useState(1);
+    const [price, setPrice] = useState(100);
     const { pathname } = useLocation()
     const nav = useNavigate();
 
@@ -35,6 +36,7 @@ export default function AddNewPlace() {
                     setCheckIn(data.checkIn)
                     setCheckOut(data.checkOut)
                     setMaxGuests(data.maxGuests)
+                    setPrice(data.price)
                 })
         }
     }, [id])
@@ -44,7 +46,7 @@ export default function AddNewPlace() {
         const placeData = {
             title, address, addedPhotos,
             description, perks, extraInfo,
-            checkIn, checkOut, maxGuests
+            checkIn, checkOut, maxGuests, price
         }
         if (id) {
             await axios.put('/places', {
@@ -116,7 +118,15 @@ export default function AddNewPlace() {
                             value={maxGuests}
                             onChange={e => { setMaxGuests(e.target.value) }} />
                     </div>
+                    
                 </div>
+                    <div className='text-center w-32 mx-auto'>
+                        <h3 className='mt-2 -mb-1 font-bold'>Price per night</h3>
+                        <input
+                            type="number"
+                            value={price}
+                            onChange={e => { setPrice(e.target.value) }} />
+                    </div>
                 <button className='primary my-4'>Save</button>
             </form>
         </div>
