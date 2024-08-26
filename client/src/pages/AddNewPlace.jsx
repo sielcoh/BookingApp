@@ -12,7 +12,7 @@ export default function AddNewPlace() {
     const [description, setDescription] = useState('');
     const [addedPhotos, setAddedPhotos] = useState([]);
     const [perks, setPerks] = useState([]);
-    const [exstraInfo, setExtraInfo] = useState('');
+    const [extraInfo, setExtraInfo] = useState('');
     const [checkIn, setCheckIn] = useState('');
     const [checkOut, setCheckOut] = useState('');
     const [maxGuests, setMaxGuests] = useState(1);
@@ -31,7 +31,7 @@ export default function AddNewPlace() {
                     setDescription(data.description);
                     setAddedPhotos(data.photos);
                     setPerks(data.perks);
-                    setExtraInfo(data.exstraInfo);
+                    setExtraInfo(data.extraInfo);
                     setCheckIn(data.checkIn)
                     setCheckOut(data.checkOut)
                     setMaxGuests(data.maxGuests)
@@ -41,14 +41,14 @@ export default function AddNewPlace() {
 
     const savePlace = async (e) => {
         e.preventDefault();
-        const placeData ={
+        const placeData = {
             title, address, addedPhotos,
-            description, perks, exstraInfo,
+            description, perks, extraInfo,
             checkIn, checkOut, maxGuests
         }
         if (id) {
             await axios.put('/places', {
-                id,...placeData
+                id, ...placeData
             });
         } else {
             await axios.post('/places', {
@@ -87,8 +87,8 @@ export default function AddNewPlace() {
                 <h2 className='text-2xl'>Extra Info</h2>
                 <p className='text-gray-500 text-sm'>house rules, etc</p>
                 <textarea
-                    value={exstraInfo}
-                    onChange={e => { setExtraInfo(e.target.value) }} />
+                    value={extraInfo}
+                    onChange={(e) => { setExtraInfo(e.target.value) }} />
 
                 <h2 className='text-2xl mt-4'>Check in&out times, max guests</h2>
                 <p className='text-gray-500 text-sm'>add check in and out times, remember to have some time window for cleaning the room between guests</p>

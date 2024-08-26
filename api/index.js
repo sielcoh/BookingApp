@@ -112,8 +112,9 @@ app.post('/upload', photosMiddleWare.array('photos', 100), async (req, res) => {
 app.post('/places', (req, res) => {
     const { token } = req.cookies;
     const { title, address, addedPhotos,
-        description, perks, extreInfo,
+        description, perks, extraInfo,
         checkIn, checkOut, maxGuests } = req.body;
+        
 
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         if (err) throw err;
@@ -121,7 +122,7 @@ app.post('/places', (req, res) => {
         const placeDoc = await Place.create({
             owner: userData.id,
             title, address, photos: addedPhotos,
-            description, perks, extreInfo,
+            description, perks, extraInfo,
             checkIn, checkOut, maxGuests
 
         })
@@ -147,7 +148,7 @@ app.get('/places/:id', async (req, res) => {
 app.put('/places', async (req, res) => {
     const { token } = req.cookies;
     const { id, title, address, addedPhotos,
-        description, perks, extreInfo,
+        description, perks, extraInfo,
         checkIn, checkOut, maxGuests } = req.body;
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
         const placeDoc = await Place.findById(id);
@@ -155,7 +156,7 @@ app.put('/places', async (req, res) => {
         if (userData.id === placeDoc.owner.toString()) {
             placeDoc.set({
                 title, address, photos: addedPhotos,
-                description, perks, extreInfo,
+                description, perks, extraInfo,
                 checkIn, checkOut, maxGuests
             })
             await placeDoc.save();
