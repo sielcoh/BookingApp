@@ -8,7 +8,8 @@ const Place = require('./models/Place.js')
 const cookieParser = require('cookie-parser');
 const download = require('image-downloader');
 const multer = require('multer')
-const fs = require('fs')
+const fs = require('fs');
+const BookingModel = require('./models/Booking.js');
 require('dotenv').config();
 const app = express();
 
@@ -164,6 +165,19 @@ app.put('/places', async (req, res) => {
 
 app.get('/places', async (req, res) => {
     res.json(await Place.find())
+});
+
+app.post('/bookings', async (req, res) => {
+    const {
+        place, checkIn, checkOut, numberOfGuests, name, phone, price
+    } = req.body;
+    try {
+        const data = await BookingModel.create({ place, checkIn, checkOut, numberOfGuests, name, phone, price })
+        res.json(data);
+    } catch (error) {
+        throw error
+    }
+
 })
 
 app.listen(4000);
